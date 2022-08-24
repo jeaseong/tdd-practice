@@ -18,6 +18,10 @@ function App() {
       <button data-testid="plusBtn" onClick={onClickPlus}>
         +
       </button>
+      <button
+        style={{ backgroundColor: "blue" }}
+        data-testid="onOffBtn"
+      ></button>
     </div>
   );
 }
