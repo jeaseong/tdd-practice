@@ -3,24 +3,29 @@ import "./App.css";
 
 function App() {
   const [counter, setCounter] = useState(0);
+  const [disable, setDisable] = useState(false);
   const onClickPlus = () => {
     setCounter((cur) => cur + 1);
   };
   const onClickMinus = () => {
     setCounter((cur) => cur - 1);
   };
+  const onClickDisableBtn = () => {
+    setDisable((cur) => !cur);
+  };
   return (
     <div className="App">
       <h3 data-testid="counter">{counter}</h3>
-      <button data-testid="minusBtn" onClick={onClickMinus}>
+      <button disabled={disable} data-testid="minusBtn" onClick={onClickMinus}>
         -
       </button>
-      <button data-testid="plusBtn" onClick={onClickPlus}>
+      <button disabled={disable} data-testid="plusBtn" onClick={onClickPlus}>
         +
       </button>
       <button
         style={{ backgroundColor: "blue" }}
         data-testid="onOffBtn"
+        onClick={onClickDisableBtn}
       ></button>
     </div>
   );
