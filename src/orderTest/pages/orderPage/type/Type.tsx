@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import Products from "../products/Products";
+import Options from "../options/Options";
+import ErrorBanner from "../../../components/ErrorBanner";
 
 interface ProsType {
-  orderType: string;
+  orderType: "products" | "options";
 }
 interface ItemType {
   name: string;
@@ -12,6 +14,7 @@ interface ItemType {
 
 const Type = ({ orderType }: ProsType) => {
   const [items, setItems] = useState<ItemType[]>([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -20,10 +23,15 @@ const Type = ({ orderType }: ProsType) => {
         setItems(res.data);
       } catch (e) {
         if (e instanceof AxiosError) console.log(e);
+        setError(true);
       }
     };
     fetchApi();
   }, []);
+
+  if (error) {
+    return <ErrorBanner message="에러가 발생했습니다." />;
+  }
 
   if (orderType === "products") {
     return (

@@ -9,4 +9,4 @@ beforeAll(() => server.listen());
 
 afterEach(() => server.resetHandlers());
 
-afterEach(() => server.close());
+afterAll(() => server.close());
