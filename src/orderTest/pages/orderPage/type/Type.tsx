@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios, { AxiosError } from "axios";
+import { OrderContext } from "../contexts/OrderContext";
 import Products from "../products/Products";
 import Options from "../options/Options";
 import ErrorBanner from "../../../components/ErrorBanner";
@@ -15,11 +16,11 @@ interface ItemType {
 const Type = ({ orderType }: ProsType) => {
   const [items, setItems] = useState<ItemType[]>([]);
   const [error, setError] = useState(false);
-
+  const [orderDatas, updateItemCounts] = useContext(OrderContext);
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/${orderType}`);
+        const res = await axios.get(`http://localhost:5001/${orderType}`);
         setItems(res.data);
       } catch (e) {
         if (e instanceof AxiosError) console.log(e);
@@ -27,7 +28,7 @@ const Type = ({ orderType }: ProsType) => {
       }
     };
     fetchApi();
-  }, []);
+  }, [orderType]);
 
   if (error) {
     return <ErrorBanner message="에러가 발생했습니다." />;
@@ -36,18 +37,53 @@ const Type = ({ orderType }: ProsType) => {
   if (orderType === "products") {
     return (
       <>
-        {items.map((item) => (
-          <Products
-            key={item.name}
-            name={item.name}
-            imagePath={item.imagePath}
-          />
-        ))}
+        <h2>주문 종류</h2>
+        <p>하나의 가격</p>
+        <p>총 가격: {orderDatas.totals.total}</p>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {items.map((item) => (
+            <Products
+              key={item.name}
+              name={item.name}
+              imagePath={item.imagePath}
+              updateItemCounts={(itemName: string, newItemCount: number) =>
+                updateItemCounts({ itemName, newItemCount, orderType })
+              }
+            />
+          ))}
+        </div>
       </>
     );
   }
 
-  return <div></div>;
+  return (
+    <div>
+      <h2>주문 종류</h2>
+      <p>하나의 가격</p>
+      <p>총 가격: {orderDatas.totals.total}</p>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {items.map((item) => (
+          <Options
+            updateItemCounts={(itemName: string, newItemCount: number) =>
+              updateItemCounts(itemName, newItemCount, orderType)
+            }
+            key={item.name}
+            name={item.name}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Type;
