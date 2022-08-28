@@ -39,7 +39,7 @@ const Type = ({ orderType }: ProsType) => {
       <>
         <h2>주문 종류</h2>
         <p>하나의 가격</p>
-        <p>총 가격: {orderDatas.totals.total}</p>
+        <p>상품 총 가격: {orderDatas.totals[orderType]}</p>
         <div
           style={{
             display: "flex",
@@ -65,7 +65,7 @@ const Type = ({ orderType }: ProsType) => {
     <div>
       <h2>주문 종류</h2>
       <p>하나의 가격</p>
-      <p>총 가격: {orderDatas.totals.total}</p>
+      <p>옵션 총 가격: {orderDatas.totals[orderType]}</p>
       <div
         style={{
           display: "flex",
@@ -75,7 +75,7 @@ const Type = ({ orderType }: ProsType) => {
         {items.map((item) => (
           <Options
             updateItemCounts={(itemName: string, newItemCount: number) =>
-              updateItemCounts(itemName, newItemCount, orderType)
+              updateItemCounts({ itemName, newItemCount, orderType })
             }
             key={item.name}
             name={item.name}
